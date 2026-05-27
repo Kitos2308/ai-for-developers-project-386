@@ -1,2 +1,28 @@
 .idea
+.vscode
 *.local.*
+
+# Node
+node_modules/
+.pnp
+.pnp.js
+
+# SvelteKit
+.svelte-kit/
+frontend/.svelte-kit/
+
+# Build
+dist/
+frontend/dist/
+
+# Env
+.env
+.env.local
+.env.*.local
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
