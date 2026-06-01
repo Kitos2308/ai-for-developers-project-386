@@ -1,4 +1,16 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: minical
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
@@ -10,3 +22,6 @@ services:
       - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
       - VITE_LOG_API_REQUESTS=${VITE_LOG_API_REQUESTS:-false}
     restart: unless-stopped
+
+volumes:
+  pgdata:

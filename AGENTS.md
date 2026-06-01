@@ -15,6 +15,7 @@
 - Alembic
 - Redis
 - Pydantic v2
+- Обязательно создавай в папке backend виртуальное окружение и ставь все зависимости там, а не в системе если не нашел нужных пакетных менеджеров создай pyproject.toml покажи его и после апрува попробуй сделать poetry lock && poetry install
 
 ### Frontend
 - SvelteKit
