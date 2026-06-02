@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Container from '$lib/components/layout/Container.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -6,8 +7,6 @@
 	import BookingForm from '$lib/components/booking/BookingForm.svelte';
 	import { getEventType, getSlots, createBooking } from '$lib/api/public';
 	import type { EventType, Slot } from '$lib/types';
-
-	let { eventTypeId } = $props();
 
 	let eventType = $state<EventType | null>(null);
 	let selectedDate = $state<string | undefined>();
@@ -18,10 +17,13 @@
 	let error = $state<string | null>(null);
 
 	$effect(() => {
+		const id = $page.params.eventTypeId;
+		if (!id) return;
+
 		async function loadEventType() {
 			try {
 				loading = true;
-				eventType = await getEventType(eventTypeId);
+				eventType = await getEventType(id);
 			} catch (e) {
 				error = e instanceof Error ? e.message : 'Не удалось загрузить тип события';
 			} finally {
@@ -53,7 +55,7 @@
 	async function handleBooking(data: { guestName?: string; guestEmail?: string; notes?: string }) {
 		if (!eventType || !selectedSlot) return;
 		try {
-			await createBooking(eventTypeId, {
+			await createBooking($page.params.eventTypeId, {
 				startTime: selectedSlot.startTime,
 				...data
 			});
@@ -94,18 +96,14 @@
 				{eventType.title}
 			</h1>
 			<Calendar
-				eventTypeId={eventTypeId}
+				eventTypeId={$page.params.eventTypeId}
 				durationMinutes={eventType.durationMinutes}
 				onDateSelect={handleDateSelect}
 				onSlotSelect={handleSlotSelect}
+				onContinue={handleContinue}
 				selectedDate={selectedDate}
 				selectedSlot={selectedSlot}
 			/>
-			<div class="flex justify-end mt-6">
-				<Button variant="primary" disabled={!selectedSlot} onclick={handleContinue}>
-					Продолжить
-				</Button>
-			</div>
 		{/if}
 	</div>
 </Container>
