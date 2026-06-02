@@ -4,23 +4,24 @@
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import { getCalendar, getSlots } from '$lib/api/public';
 
 	let {
 		eventTypeId,
 		durationMinutes,
 		onDateSelect,
 		onSlotSelect,
+		onContinue,
 		selectedDate,
 		selectedSlot,
-		...restProps
 	}: {
 		eventTypeId: string;
 		durationMinutes: number;
 		onDateSelect: (date: string) => void;
 		onSlotSelect: (slot: Slot) => void;
+		onContinue: () => void;
 		selectedDate?: string;
 		selectedSlot?: Slot;
-		[key: string]: any;
 	} = $props();
 
 	let currentDate = $state(new Date());
@@ -35,10 +36,10 @@
 
 	$effect(() => {
 		async function loadCalendar() {
+			if (!eventTypeId) return;
 			try {
 				loading = true;
-				const response = await fetch(`/api/calendar/${eventTypeId}?month=${month + 1}&year=${year}`);
-				calendarDays = await response.json();
+				calendarDays = await getCalendar(eventTypeId, month + 1, year);
 			} catch {
 				calendarDays = [];
 			} finally {
@@ -50,14 +51,13 @@
 
 	$effect(() => {
 		async function loadSlots() {
-			if (!selectedDate) {
+			if (!selectedDate || !eventTypeId) {
 				slots = [];
 				return;
 			}
 			try {
 				loading = true;
-				const response = await fetch(`/api/slots/${eventTypeId}?date=${selectedDate}`);
-				slots = await response.json();
+				slots = await getSlots(eventTypeId, selectedDate);
 			} catch {
 				slots = [];
 			} finally {
@@ -89,7 +89,7 @@
 	}
 </script>
 
-<div class="grid lg:grid-cols-3 gap-6" {...restProps}>
+<div class="grid lg:grid-cols-3 gap-6">
 	<!-- Left: Event Info -->
 	<Card padding="p-6">
 		<div class="flex items-center gap-3 mb-4">
@@ -205,7 +205,7 @@
 
 		<div class="flex gap-3 mt-6">
 			<Button variant="secondary" class="flex-1" href="/book">Назад</Button>
-			<Button variant="primary" class="flex-1" disabled={!selectedSlot}>Продолжить</Button>
+			<Button variant="primary" class="flex-1" disabled={!selectedSlot} onclick={onContinue}>Продолжить</Button>
 		</div>
 	</Card>
 </div>

@@ -1,19 +1,5 @@
+import { fetchApi } from '$lib/api/client';
 import type { EventType, Booking, CreateEventTypeRequest, UpdateEventTypeRequest, UpdateBookingRequest } from '$lib/types';
-
-const API_URL = import.meta.env.VITE_API_URL || '';
-
-async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
-	const fullUrl = API_URL ? `${API_URL}${url}` : url;
-	const response = await fetch(fullUrl, {
-		headers: { 'Content-Type': 'application/json' },
-		...options
-	});
-	if (!response.ok) {
-		throw new Error(`API error: ${response.status} ${response.statusText}`);
-	}
-	if (response.status === 204) return undefined as T;
-	return response.json();
-}
 
 export async function getAdminEventTypes(): Promise<EventType[]> {
 	return fetchApi<EventType[]>('/admin/event-types');
