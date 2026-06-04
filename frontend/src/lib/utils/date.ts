@@ -7,7 +7,10 @@ const DAYS_RU = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 const DAYS_FULL_RU = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
 
 export function formatDate(date: Date): string {
-	return date.toISOString().split('T')[0];
+	const y = date.getFullYear();
+	const m = String(date.getMonth() + 1).padStart(2, '0');
+	const d = String(date.getDate()).padStart(2, '0');
+	return `${y}-${m}-${d}`;
 }
 
 export function formatMonthYear(date: Date): string {
@@ -24,14 +27,25 @@ export function formatDayMonth(date: Date): string {
 	return `${formatDayOfWeek(date)}, ${day} ${month}`;
 }
 
+const MSK_TZ = 'Europe/Moscow';
+
 export function formatTime(date: Date): string {
-	return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+	return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: MSK_TZ });
 }
 
 export function formatSlotTime(startTime: string, endTime: string): string {
 	const start = new Date(startTime);
 	const end = new Date(endTime);
 	return `${formatTime(start)} - ${formatTime(end)}`;
+}
+
+export function formatDateTimeMSK(isoString: string, options?: Intl.DateTimeFormatOptions): string {
+	const defaultOptions: Intl.DateTimeFormatOptions = {
+		dateStyle: 'full',
+		timeStyle: 'short',
+		timeZone: MSK_TZ,
+	};
+	return new Date(isoString).toLocaleString('ru-RU', { ...defaultOptions, ...options });
 }
 
 export function getDaysInMonth(year: number, month: number): number {

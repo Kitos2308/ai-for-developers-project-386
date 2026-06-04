@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Booking, EventType } from '$lib/types';
+	import { formatDateTimeMSK } from '$lib/utils/date';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -61,7 +62,7 @@
 								<Badge variant="success">Подтверждено</Badge>
 							</div>
 							<p class="text-sm text-gray-500 dark:text-gray-400">
-								{new Date(booking.startTime).toLocaleString('ru-RU', { dateStyle: 'full', timeStyle: 'short' })}
+								{formatDateTimeMSK(booking.startTime)}
 							</p>
 							{#if booking.guestName || booking.guestEmail}
 								<p class="text-sm text-gray-600 dark:text-gray-300 mt-1">

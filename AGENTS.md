@@ -210,3 +210,15 @@ Repository Layer
 ↓
 PostgreSQL
 ```
+
+## Infrastructure and tools
+
+```text
+- You can not install additional cli utils in system, only in virtualenv
+- Use utils cli via terminal or Makefile
+Example:
+docker compose 
+- If you use cli utils so often then add command in Makefile 
+- Almost all utilities in system install via brew
+
+```
