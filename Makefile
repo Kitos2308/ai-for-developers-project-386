@@ -1,4 +1,4 @@
-.PHONY: install dev build preview check clean migrate.gen migrate.up migrate.down
+.PHONY: install dev build preview check clean migrate.gen migrate.up migrate.down e2e.install e2e.test e2e.test.api e2e.test.ui e2e.test.headed e2e.report
 
 export PATH := /opt/homebrew/bin:$(PATH)
 
@@ -35,4 +35,23 @@ migrate.down:
 	cd $(BACKEND_DIR) && poetry run alembic downgrade -1
 
 backend.up:
+	make migrate.up
 	cd $(BACKEND_DIR) && poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+e2e.install:
+	cd e2e && npm install && npx playwright install chromium
+
+e2e.test:
+	cd e2e && npx playwright test
+
+e2e.test.api:
+	cd e2e && npx playwright test --project=api
+
+e2e.test.ui:
+	cd e2e && npx playwright test --project=ui
+
+e2e.test.headed:
+	cd e2e && npx playwright test --project=ui --headed
+
+e2e.report:
+	cd e2e && npx playwright show-report

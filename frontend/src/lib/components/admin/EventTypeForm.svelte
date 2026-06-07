@@ -21,12 +21,14 @@
 	let durationMinutes = $state(eventType?.durationMinutes?.toString() ?? '30');
 
 	function handleSubmit() {
-		if (!title || !durationMinutes) return;
-		const data = {
+		if (!title || (!eventType && !durationMinutes)) return;
+		const data: Record<string, any> = {
 			title,
 			description: description || undefined,
-			durationMinutes: parseInt(durationMinutes)
 		};
+		if (!eventType) {
+			data.durationMinutes = parseInt(durationMinutes);
+		}
 		onSave(data);
 	}
 </script>
@@ -47,7 +49,10 @@
 				placeholder="Краткое описание встречи..."
 			></textarea>
 		</div>
-		<Input label="Длительность (минуты)" type="number" placeholder="30" bind:value={durationMinutes} required min="5" max="180" />
+		<Input label="Длительность (минуты)" type="number" placeholder="30" bind:value={durationMinutes} required min="5" max="180" disabled={!!eventType} />
+		{#if eventType}
+			<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Длительность нельзя изменить после создания — это сломает существующие бронирования</p>
+		{/if}
 
 		<div class="flex gap-3 pt-4">
 			<Button type="button" variant="secondary" class="flex-1" onclick={onCancel}>Отмена</Button>

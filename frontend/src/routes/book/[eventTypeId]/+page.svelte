@@ -7,6 +7,7 @@
 	import BookingForm from '$lib/components/booking/BookingForm.svelte';
 	import { getEventType, getSlots, createBooking } from '$lib/api/public';
 	import type { EventType, Slot } from '$lib/types';
+	import { formatDateTimeMSK } from '$lib/utils/date';
 
 	let eventType = $state<EventType | null>(null);
 	let selectedDate = $state<string | undefined>();
@@ -83,7 +84,7 @@
 				</div>
 				<h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Бронирование подтверждено!</h2>
 				<p class="text-gray-500 dark:text-gray-400 mb-6">
-					Ваша встреча забронирована на {selectedSlot ? new Date(selectedSlot.startTime).toLocaleString('ru-RU') : ''}
+					Ваша встреча забронирована на {selectedSlot ? formatDateTimeMSK(selectedSlot.startTime) : ''}
 				</p>
 			<a href="/book">
 				<Button variant="primary">Записаться ещё</Button>

@@ -3,6 +3,7 @@
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
+	import { formatDateTimeMSK } from '$lib/utils/date';
 
 	let {
 		slot,
@@ -33,7 +34,7 @@
 	<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-6">
 		<p class="text-sm text-gray-500 dark:text-gray-400">Выбранное время</p>
 		<p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-			{new Date(slot.startTime).toLocaleString('ru-RU', { dateStyle: 'full', timeStyle: 'short' })}
+			{formatDateTimeMSK(slot.startTime)}
 		</p>
 	</div>
 
