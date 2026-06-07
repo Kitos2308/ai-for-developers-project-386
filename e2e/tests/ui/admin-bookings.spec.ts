@@ -37,7 +37,8 @@ test.describe('Админ: Бронирования (UI)', () => {
     await expect(bookingsPage.heading).toBeVisible();
   });
 
-  test('показит карточку бронирования в списке', async () => {
+  test('показит карточку бронирования в списке', async ({ page }) => {
+    await expect(bookingsPage.bookingCards.first()).toBeVisible({ timeout: 10000 });
     const count = await bookingsPage.getBookingCount();
     expect(count).toBeGreaterThanOrEqual(1);
   });

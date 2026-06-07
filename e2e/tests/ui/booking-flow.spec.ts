@@ -31,8 +31,9 @@ test.describe('Пользовательский сценарий: Брониро
     bookEventPage = new BookEventPage(page);
   });
 
-  test('US-2: видит список типов событий на странице /book', async () => {
+  test('US-2: видит список типов событий на странице /book', async ({ page }) => {
     await bookPage.goto();
+    await expect(bookPage.eventTypeCards.first()).toBeVisible({ timeout: 10000 });
     const count = await bookPage.getEventTypeCount();
     expect(count).toBeGreaterThanOrEqual(1);
   });

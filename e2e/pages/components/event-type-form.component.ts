@@ -10,9 +10,9 @@ export class EventTypeFormComponent {
 
   constructor(page: Page) {
     this.page = page;
-    this.titleInput = page.getByLabel(/Название/i);
+    this.titleInput = page.locator('label:has-text("Название") + input');
     this.descriptionTextarea = page.getByPlaceholder(/Краткое описание/i);
-    this.durationInput = page.getByLabel(/Длительность/i);
+    this.durationInput = page.locator('label:has-text("Длительность") + input');
     this.saveButton = page.getByRole('button', { name: /Сохранить/i });
     this.cancelButton = page.getByRole('button', { name: /Отмена/i }).last();
   }

@@ -9,7 +9,7 @@ export class ModalComponent {
   constructor(page: Page) {
     this.page = page;
     this.overlay = page.locator('.fixed.inset-0');
-    this.title = page.locator('.fixed h3');
+    this.title = page.locator('.fixed .border-b h3');
     this.closeButton = page.locator('.fixed button').filter({ hasText: /✕/ }).or(page.locator('.fixed button').first());
   }
 

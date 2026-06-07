@@ -31,10 +31,18 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: 'cd ../frontend && npm run dev',
-    port: 5173,
-    reuseExistingServer: true,
-    timeout: 30000,
-  },
+  webServer: [
+    {
+      command: 'cd ../frontend && npm run dev',
+      port: 5173,
+      reuseExistingServer: true,
+      timeout: 30000,
+    },
+    {
+      command: 'node mock/server.js',
+      port: 8000,
+      reuseExistingServer: true,
+      timeout: 30000,
+    },
+  ],
 });

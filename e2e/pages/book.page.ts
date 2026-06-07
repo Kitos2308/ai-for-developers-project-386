@@ -9,7 +9,7 @@ export class BookPage {
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole('heading');
-    this.eventTypeCards = page.locator('[class*="group"]');
+    this.eventTypeCards = page.locator('a[href^="/book/"]');
     this.emptyState = page.getByText(/Нет типов событий/i);
   }
 

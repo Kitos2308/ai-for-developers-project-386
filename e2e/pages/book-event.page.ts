@@ -12,7 +12,7 @@ export class BookEventPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.heading = page.getByRole('heading');
+    this.heading = page.locator('h1').first();
     this.successMessage = page.getByText(/Бронирование подтверждено/i);
     this.bookAgainLink = page.getByRole('link', { name: /Записаться ещё/i });
     this.calendar = new CalendarComponent(page);

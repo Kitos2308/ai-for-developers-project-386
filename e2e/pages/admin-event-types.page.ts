@@ -23,9 +23,11 @@ export class AdminEventTypesPage {
 
   async goto() {
     await this.page.goto('/admin/event-types');
+    await this.page.waitForLoadState('networkidle');
   }
 
   async clickAdd() {
+    await this.addButton.waitFor({ state: 'visible' });
     await this.addButton.click();
   }
 

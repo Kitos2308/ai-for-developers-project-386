@@ -11,7 +11,7 @@ export class BookingFormComponent {
 
   constructor(page: Page) {
     this.page = page;
-    this.guestNameInput = page.locator('input').filter({ has: page.locator('~ Имя') }).first();
+    this.guestNameInput = page.locator('label:has-text("Имя") + input');
     this.guestEmailInput = page.locator('input[type="email"]').first();
     this.notesTextarea = page.getByPlaceholder(/Дополнительная информация/i);
     this.submitButton = page.getByRole('button', { name: /Забронировать/i });
@@ -20,12 +20,10 @@ export class BookingFormComponent {
   }
 
   async fillForm(data: { guestName?: string; guestEmail?: string; notes?: string }) {
-    const nameInput = this.page.locator('input').first();
-    if (data.guestName) await nameInput.fill(data.guestName);
+    if (data.guestName) await this.guestNameInput.fill(data.guestName);
 
-    const emailInputs = this.page.locator('input[type="email"]');
-    if (data.guestEmail && (await emailInputs.count()) > 0) {
-      await emailInputs.first().fill(data.guestEmail);
+    if (data.guestEmail && (await this.guestEmailInput.count()) > 0) {
+      await this.guestEmailInput.fill(data.guestEmail);
     }
 
     if (data.notes) await this.notesTextarea.fill(data.notes);
