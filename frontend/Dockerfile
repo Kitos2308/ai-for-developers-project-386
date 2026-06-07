@@ -1,17 +1,19 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY frontend/ .
 RUN npm run build
 
 FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/package.json /app/package-lock.json ./
-RUN npm ci --omit=dev
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/.svelte-kit ./.svelte-kit
+
+RUN apk add --no-cache make
+
+WORKDIR /project
+COPY Makefile .
+COPY frontend ./frontend
+COPY --from=builder /app/build ./frontend/build
+COPY --from=builder /app/.svelte-kit ./frontend/.svelte-kit
 
 EXPOSE 3000
-CMD ["node", "build"]
+ENTRYPOINT ["./frontend/entrypoint.sh"]

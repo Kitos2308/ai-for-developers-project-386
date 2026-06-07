@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from clients.database import engine
 from routers import admin_bookings, admin_event_types, public_bookings, public_event_types
+from settings import settings
 
 
 @asynccontextmanager
@@ -17,7 +18,7 @@ app = FastAPI(title="Mini Cal API", version="0.1.0", lifespan=lifespan, redirect
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

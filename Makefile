@@ -1,4 +1,4 @@
-.PHONY: install dev build preview check clean migrate.gen migrate.up migrate.down e2e.install e2e.test e2e.test.api e2e.test.ui e2e.test.headed e2e.report
+.PHONY: install dev build preview check build.frontend clean start migrate.gen migrate.up migrate.down e2e.install e2e.test e2e.test.api e2e.test.ui e2e.test.headed e2e.report docker.build
 
 export PATH := /opt/homebrew/bin:$(PATH)
 
@@ -11,14 +11,22 @@ install:
 dev:
 	cd $(FRONTEND_DIR) && npm run dev
 
-build:
+build: docker.build
+
+build.frontend:
 	cd $(FRONTEND_DIR) && npm run build
+
+docker.build:
+	docker compose build
 
 preview:
 	cd $(FRONTEND_DIR) && npm run preview
 
 check:
 	cd $(FRONTEND_DIR) && npm run check
+
+start:
+	cd $(FRONTEND_DIR) && node build
 
 clean:
 	rm -rf $(FRONTEND_DIR)/node_modules
@@ -29,7 +37,7 @@ migrate.gen:
 	cd $(BACKEND_DIR) && poetry run alembic revision --autogenerate -m "$(name)"
 
 migrate.up:
-	cd $(BACKEND_DIR) && poetry run alembic upgrade head
+	cd $(BACKEND_DIR) && (command -v poetry > /dev/null 2>&1 && poetry run alembic upgrade head || alembic upgrade head)
 
 migrate.down:
 	cd $(BACKEND_DIR) && poetry run alembic downgrade -1
