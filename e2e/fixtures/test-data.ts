@@ -29,5 +29,12 @@ export function futureSlotTime(daysFromNow: number = 1, hour: number = 10): stri
   return d.toISOString();
 }
 
+export function futureSlotTimeUTC(daysFromNow: number = 1, hourUTC: number = 10): string {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  d.setUTCHours(hourUTC, 0, 0, 0);
+  return d.toISOString();
+}
+
 export const INVALID_UUID = '00000000-0000-0000-0000-000000000000';
 export const MALFORMED_UUID = 'not-a-uuid';

@@ -29,10 +29,16 @@ test.describe('Public Event Types API', () => {
   });
 
   test('GET /public/event-types — возвращает пустой список если нет типов', async ({ api }) => {
+    const bookingsRes = await api.get('/admin/bookings');
+    const allBookings = await bookingsRes.json();
+    for (const b of allBookings) {
+      await api.delete(`/admin/bookings/${b.id}`).catch(() => {});
+    }
+
     const allRes = await api.get('/admin/event-types');
     const allTypes = await allRes.json();
     for (const et of allTypes) {
-      await api.delete(`/admin/event-types/${et.id}`);
+      await api.delete(`/admin/event-types/${et.id}`).catch(() => {});
     }
 
     const res = await api.get('/public/event-types');

@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/api.fixture';
-import { VALID_EVENT_TYPE, futureSlotTime, INVALID_UUID } from '../../fixtures/test-data';
+import { VALID_EVENT_TYPE, futureSlotTime, futureSlotTimeUTC, INVALID_UUID } from '../../fixtures/test-data';
 
 test.describe('Public Bookings API', () => {
   let eventTypeId: string;
@@ -80,7 +80,7 @@ test.describe('Public Bookings API', () => {
   });
 
   test('POST — 422 для времени вне рабочих часов (рано утром)', async ({ api }) => {
-    const startTime = futureSlotTime(1, 7);
+    const startTime = futureSlotTimeUTC(1, 4);
     const res = await api.post(`/public/event-types/${eventTypeId}/bookings`, {
       data: { startTime },
     });
@@ -121,7 +121,7 @@ test.describe('Public Bookings API', () => {
   });
 
   test('POST — 422 для времени вне рабочих часов (поздний вечер)', async ({ api }) => {
-    const startTime = futureSlotTime(1, 20);
+    const startTime = futureSlotTimeUTC(1, 18);
     const res = await api.post(`/public/event-types/${eventTypeId}/bookings`, {
       data: { startTime },
     });
