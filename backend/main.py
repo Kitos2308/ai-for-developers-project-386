@@ -1,20 +1,11 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from clients.database import engine
 from routers import admin_bookings, admin_event_types, public_bookings, public_event_types
 from settings import settings
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-    await engine.dispose()
-
-
-app = FastAPI(title="Mini Cal API", version="0.1.0", lifespan=lifespan, redirect_slashes=False)
+app = FastAPI(title="Mini Cal API", version="0.1.0", redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,5 +22,5 @@ app.include_router(admin_bookings.router, prefix="/admin/bookings", tags=["admin
 
 
 @app.get("/health")
-async def health():
+def health():
     return {"status": "ok"}

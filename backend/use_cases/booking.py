@@ -55,17 +55,17 @@ class BookingUseCase:
         self.booking_repo = booking_repo
         self.event_type_repo = event_type_repo
 
-    async def list_all(self):
-        return await self.booking_repo.list_all()
+    def list_all(self):
+        return self.booking_repo.list_all()
 
-    async def get_by_id(self, booking_id: uuid.UUID):
-        booking = await self.booking_repo.get_by_id(booking_id)
+    def get_by_id(self, booking_id: uuid.UUID):
+        booking = self.booking_repo.get_by_id(booking_id)
         if not booking:
             raise NotFoundException("Booking not found")
         return booking
 
-    async def create(self, event_type_id: uuid.UUID, start_time: datetime, guest_name: str | None, guest_email: str | None, notes: str | None):
-        event_type = await self.event_type_repo.get_by_id(event_type_id)
+    def create(self, event_type_id: uuid.UUID, start_time: datetime, guest_name: str | None, guest_email: str | None, notes: str | None):
+        event_type = self.event_type_repo.get_by_id(event_type_id)
         if not event_type:
             raise NotFoundException("EventType not found")
 
@@ -91,7 +91,7 @@ class BookingUseCase:
             if end_msk > _start_of_day_msk(start_msk.date()).replace(hour=WORK_END_HOUR):
                 raise BusinessRuleException("Slot exceeds working hours")
 
-        overlapping = await self.booking_repo.get_overlapping(start_time, end_time)
+        overlapping = self.booking_repo.get_overlapping(start_time, end_time)
         if overlapping:
             raise ConflictException("Time slot is already booked")
 
@@ -104,10 +104,10 @@ class BookingUseCase:
             guest_email=guest_email,
             notes=notes,
         )
-        return await self.booking_repo.create(booking)
+        return self.booking_repo.create(booking)
 
-    async def update(self, booking_id: uuid.UUID, guest_name: str | None, guest_email: str | None, notes: str | None):
-        booking = await self.get_by_id(booking_id)
+    def update(self, booking_id: uuid.UUID, guest_name: str | None, guest_email: str | None, notes: str | None):
+        booking = self.get_by_id(booking_id)
         data = {}
         if guest_name is not None:
             data["guest_name"] = guest_name
@@ -115,14 +115,14 @@ class BookingUseCase:
             data["guest_email"] = guest_email
         if notes is not None:
             data["notes"] = notes
-        return await self.booking_repo.update(booking, data)
+        return self.booking_repo.update(booking, data)
 
-    async def delete(self, booking_id: uuid.UUID):
-        booking = await self.get_by_id(booking_id)
-        await self.booking_repo.delete(booking)
+    def delete(self, booking_id: uuid.UUID):
+        booking = self.get_by_id(booking_id)
+        self.booking_repo.delete(booking)
 
-    async def get_slots(self, event_type_id: uuid.UUID, date_str: str) -> list[SlotResponse]:
-        event_type = await self.event_type_repo.get_by_id(event_type_id)
+    def get_slots(self, event_type_id: uuid.UUID, date_str: str) -> list[SlotResponse]:
+        event_type = self.event_type_repo.get_by_id(event_type_id)
         if not event_type:
             raise NotFoundException("EventType not found")
 
@@ -141,12 +141,12 @@ class BookingUseCase:
         day_start_utc = datetime(d.year, d.month, d.day, WORK_START_HOUR, tzinfo=MSK_TZ).astimezone(timezone.utc)
         day_end_utc = datetime(d.year, d.month, d.day, WORK_END_HOUR, tzinfo=MSK_TZ).astimezone(timezone.utc)
 
-        bookings = await self.booking_repo.get_all_in_range(day_start_utc, day_end_utc)
+        bookings = self.booking_repo.get_all_in_range(day_start_utc, day_end_utc)
 
         return _generate_slots_for_day(d, event_type.duration_minutes, bookings, now_msk)
 
-    async def get_calendar(self, event_type_id: uuid.UUID, month: int, year: int) -> list[CalendarDaySlotsResponse]:
-        event_type = await self.event_type_repo.get_by_id(event_type_id)
+    def get_calendar(self, event_type_id: uuid.UUID, month: int, year: int) -> list[CalendarDaySlotsResponse]:
+        event_type = self.event_type_repo.get_by_id(event_type_id)
         if not event_type:
             raise NotFoundException("EventType not found")
 
@@ -163,7 +163,7 @@ class BookingUseCase:
         range_start_utc = datetime(year, month, 1, WORK_START_HOUR, tzinfo=MSK_TZ).astimezone(timezone.utc)
         range_end_utc = datetime(year, month, days_in_month, WORK_END_HOUR, tzinfo=MSK_TZ).astimezone(timezone.utc)
 
-        all_bookings = await self.booking_repo.get_all_in_range(range_start_utc, range_end_utc)
+        all_bookings = self.booking_repo.get_all_in_range(range_start_utc, range_end_utc)
 
         for day_num in range(1, days_in_month + 1):
             d = date(year, month, day_num)
