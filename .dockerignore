@@ -1,0 +1,15 @@
+node_modules/
+.git
+.venv
+__pycache__
+*.pyc
+.idea
+.vscode
+.DS_Store
+*.local.*
+dist/
+build/
+.svelte-kit/
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
