@@ -26,4 +26,3 @@ services:
 databases:
   - name: postgres
     databaseName: minical
-    user: postgres
