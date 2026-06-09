@@ -1,6 +1,7 @@
 import { toastStore } from '$lib/stores/toast.svelte';
 
-const API_URL = import.meta.env.VITE_API_URL || '__API_URL__';
+const FALLBACK_API_URL = 'https://ai-for-developers-project-386-y0w1.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || FALLBACK_API_URL;
 
 async function extractError(response: Response): Promise<string> {
 	try {
