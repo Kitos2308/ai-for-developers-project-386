@@ -19,6 +19,9 @@ build.frontend:
 docker.build:
 	docker compose build
 
+docker.build.up:
+	docker compose up -d --build
+
 preview:
 	cd $(FRONTEND_DIR) && npm run preview
 
