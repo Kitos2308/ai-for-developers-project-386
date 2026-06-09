@@ -44,7 +44,7 @@ migrate.down:
 
 backend.up:
 	make migrate.up
-	cd $(BACKEND_DIR) && poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+	cd $(BACKEND_DIR) && poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-level debug
 
 e2e.install:
 	cd e2e && npm install && npx playwright install chromium
