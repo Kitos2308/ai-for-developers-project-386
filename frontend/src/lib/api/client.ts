@@ -1,6 +1,6 @@
 import { toastStore } from '$lib/stores/toast.svelte';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL || '__API_URL__';
 
 async function extractError(response: Response): Promise<string> {
 	try {
