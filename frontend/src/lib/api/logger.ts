@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || '__API_URL__';
 const LOG_REQUESTS = import.meta.env.VITE_LOG_API_REQUESTS === 'true';
 
 export function logApiRequest(method: string, url: string, headers?: Record<string, string>, body?: string) {
