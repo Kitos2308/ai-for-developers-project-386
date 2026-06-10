@@ -22,6 +22,7 @@ FROM python:3.12-slim AS runner
 RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     postgresql \
+    && ln -sf /usr/lib/postgresql/15/bin/* /usr/local/bin/ \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=node:20-slim /usr/local/bin/node /usr/local/bin/node
