@@ -21,19 +21,13 @@ FROM python:3.12-slim AS runner
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
-    postgresql \
-    && ln -sf /usr/lib/postgresql/15/bin/* /usr/local/bin/ \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=node:20-slim /usr/local/bin/node /usr/local/bin/node
 
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
-    PGDATA=/var/lib/postgresql/data \
-    POSTGRES_USER=postgres \
-    POSTGRES_PASSWORD=postgres \
-    POSTGRES_DB=minical \
-    DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/minical
+    DATABASE_URL=postgresql+psycopg2://minicalpostgres:aebMZsIsUyM1xgtxtqBARHUWOufBcASY@dpg-d8jioa48aovs739e2p40-a.oregon-postgres.render.com/minicalpostgres
 
 COPY --from=backend-builder /app/.venv /app/.venv
 
@@ -48,7 +42,8 @@ COPY Makefile .
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
-ENV PORT=3000
-EXPOSE 3000
+ARG PORT=3000
+ENV PORT=${PORT}
+EXPOSE ${PORT}
 
 ENTRYPOINT ["./entrypoint.sh"]
